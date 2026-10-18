@@ -1,9 +1,0 @@
-[package]
-name = "space"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-colored = "3.1.1"
-sysinfo = "0.39.6"
-terminal_size = "0.4.4"
