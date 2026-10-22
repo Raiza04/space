@@ -32,6 +32,8 @@ pub fn run_general(total_width: f64) {
     //Byte to Gb
     let gb_divisor = 1_073_741_824.0;
 
+    let mut printed_blocks = 0;
+
     for (i, disk) in disks.iter().enumerate() {
         let name = disk.name().to_string_lossy();
         if !name.starts_with("/dev/") {
@@ -66,17 +68,19 @@ pub fn run_general(total_width: f64) {
                 .color(color_name)
                 .to_string(),
         );
+
+        printed_blocks += bar_len_rounded;
     }
 
-    let bar_free_len = system_free_bytes as f64 / system_total_bytes as f64 * total_width;
+    let bar_free_len = total_width as usize - printed_blocks;
 
-    combined_bar.push_str(&"░".repeat(bar_free_len.round() as usize - 1));
+    combined_bar.push_str(&"░".repeat(bar_free_len).dimmed().to_string());
 
     let system_free_gb = system_free_bytes as f64 / gb_divisor;
 
     legend_line.push(format!("Free - {:.2} G", system_free_gb));
 
-    println!("{combined_bar}");
+    println!("[{combined_bar}]");
 
     for word in legend_line {
         println!("{word}");
